@@ -1,0 +1,28 @@
+# ==============================================================================
+# HelmetVision AI - Deep Learning Dataset Configuration
+# Standard YOLO Dataset Definition for Motorcycle Helmet Safety Compliance
+# ==============================================================================
+
+# Dataset root directory (relative to this yaml file or absolute path)
+path: dataset
+
+# Subdirectories for splits
+train: images/train
+val: images/val
+test: images/test
+
+# Number of detection classes
+nc: 4
+
+# Class names mapping
+names:
+  0: Helmet
+  1: No Helmet
+  2: Rider
+  3: Motorcycle
+
+# Metadata
+metadata:
+  task: detect
+  description: Real-time traffic surveillance helmet detection dataset
+  version: 1.0.0

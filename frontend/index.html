@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI-Powered Real-Time Helmet Detection and Safety Surveillance System">
+  <title>HelmetVision AI — Smart Traffic & Safety Surveillance</title>
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Top Header Navigation -->
+    <header class="navbar" id="app-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a8 8 0 0 0-8 8v1a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4v-1a8 8 0 0 0-8-8z"/>
+            <path d="M4 14v2a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4v-2"/>
+            <circle cx="12" cy="10" r="2"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>HELMET<span class="highlight">VISION</span> AI</h1>
+          <span class="brand-tagline">Real-Time Deep Learning Safety Surveillance</span>
+        </div>
+      </div>
+
+      <div class="system-telemetry">
+        <div class="telemetry-pill">
+          <span class="telemetry-dot" id="system-status-dot"></span>
+          <span class="telemetry-label">SYSTEM:</span>
+          <span class="telemetry-val" id="system-status-text">STANDBY</span>
+        </div>
+        <div class="telemetry-pill">
+          <span class="telemetry-label">MODEL:</span>
+          <span class="telemetry-val highlight-cyan" id="model-mode-text">SIMULATED DL</span>
+        </div>
+        <div class="telemetry-pill">
+          <span class="telemetry-label">LATENCY:</span>
+          <span class="telemetry-val" id="fps-counter">0 ms (0 FPS)</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-audio-toggle" class="btn btn-icon" title="Toggle Violation Alarm Sound" aria-label="Toggle violation alarm sound">
+          <svg id="audio-icon-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg id="audio-icon-off" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <button id="btn-open-settings" class="btn btn-secondary" aria-label="Open model settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          Backend Config
+        </button>
+      </div>
+    </header>
+
+    <!-- Analytics Stats Bar -->
+    <section class="stats-grid" aria-label="System Metrics Summary">
+      <div class="stat-card" id="card-total-scans">
+        <div class="stat-icon icon-blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-title">Frames Evaluated</span>
+          <span class="stat-value" id="stat-total-frames">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card" id="card-compliant-count">
+        <div class="stat-icon icon-green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-title">Helmets Detected (Safe)</span>
+          <span class="stat-value text-green" id="stat-compliant-count">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card" id="card-violation-count">
+        <div class="stat-icon icon-red">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-title">No Helmet (Violations)</span>
+          <span class="stat-value text-red" id="stat-violation-count">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card" id="card-compliance-rate">
+        <div class="stat-icon icon-cyan">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-title">Safety Compliance Rate</span>
+          <span class="stat-value" id="stat-compliance-rate">100%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Workspace Grid: Camera Viewport + Status Display -->
+    <main class="main-layout">
+      
+      <!-- Left Side: Detection Camera Viewport -->
+      <section class="camera-panel" aria-label="Camera Detection Viewport">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h2>Surveillance Stream</h2>
+            <span class="badge" id="camera-badge">STANDBY</span>
+          </div>
+          <div class="viewport-hud-info">
+            <span id="hud-resolution">RES: -- × --</span>
+            <span id="hud-clock">00:00:00</span>
+          </div>
+        </div>
+
+        <!-- Video & Canvas Detection Stage -->
+        <div class="video-container" id="video-wrapper">
+          <video id="webcam-feed" playsinline muted autoplay></video>
+          <canvas id="detection-canvas"></canvas>
+          
+          <!-- Scanline Animation & Crosshair Reticles -->
+          <div class="scanline" id="scanline"></div>
+          <div class="hud-reticle top-left"></div>
+          <div class="hud-reticle top-right"></div>
+          <div class="hud-reticle bottom-left"></div>
+          <div class="hud-reticle bottom-right"></div>
+
+          <!-- Placeholder when camera is inactive -->
+          <div class="camera-standby-overlay" id="camera-placeholder">
+            <div class="standby-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </div>
+            <h3>Camera Feed Offline</h3>
+            <p>Start your webcam or upload a test image/video file to begin real-time helmet detection.</p>
+            <div class="standby-actions">
+              <button id="btn-quick-start" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Launch Webcam
+              </button>
+              <button id="btn-quick-demo" class="btn btn-secondary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+                Load Demo Video/Image
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Camera Controls Toolbar -->
+        <div class="camera-controls">
+          <div class="control-group">
+            <button id="btn-start-camera" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 7l-7 5 7 5V7z"></path>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+              <span>Start Camera</span>
+            </button>
+            <button id="btn-stop-camera" class="btn btn-danger" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              </svg>
+              <span>Stop Camera</span>
+            </button>
+            <button id="btn-switch-camera" class="btn btn-secondary" title="Switch front/back camera">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+              </svg>
+              <span>Flip</span>
+            </button>
+          </div>
+
+          <div class="control-group">
+            <label for="media-file-input" class="btn btn-secondary btn-upload" title="Upload Image or Video">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>Upload Media</span>
+              <input type="file" id="media-file-input" accept="image/*,video/*" class="sr-only">
+            </label>
+            <button id="btn-capture-snapshot" class="btn btn-secondary" title="Capture current frame">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <span>Snapshot</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Side: Real-Time Detection & Safety Status Panel -->
+      <section class="status-panel" aria-label="Detection Classification and Compliance State">
+        
+        <!-- Primary Big Status Card -->
+        <div class="status-card-main status-standby" id="status-card-main">
+          <div class="status-icon-ring" id="status-icon-ring">
+            <div id="status-icon-container">
+              <!-- Default: Standby/Radar Icon -->
+              <svg class="status-svg" id="svg-standby" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                <path d="M2 12h20"></path>
+              </svg>
+              <!-- Safe: Shield Checked Icon -->
+              <svg class="status-svg hidden" id="svg-safe" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+              <!-- Violation: Alert Triangle Icon -->
+              <svg class="status-svg hidden" id="svg-violation" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+          </div>
+
+          <div class="status-meta">
+            <span class="status-overline" id="status-overline">SURVEILLANCE STATUS</span>
+            <h2 class="status-headline" id="status-headline">STANDBY / NO FEED</h2>
+            <p class="status-description" id="status-description">Activate camera or upload footage to monitor safety helmet compliance in real-time.</p>
+          </div>
+
+          <div class="confidence-container">
+            <div class="confidence-header">
+              <span>Model Confidence:</span>
+              <strong id="confidence-percentage">0.0%</strong>
+            </div>
+            <div class="confidence-bar-bg">
+              <div class="confidence-bar-fill" id="confidence-bar-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detection Class Breakdown Box -->
+        <div class="classification-box">
+          <h3 class="box-title">Active Detections in Current Frame</h3>
+          <div class="classes-grid">
+            <div class="class-item" id="class-helmet">
+              <span class="class-dot dot-green"></span>
+              <div class="class-info">
+                <span class="class-name">Helmet Detected</span>
+                <span class="class-sub">Safety Compliant</span>
+              </div>
+              <span class="class-count" id="count-helmet">0</span>
+            </div>
+
+            <div class="class-item" id="class-no-helmet">
+              <span class="class-dot dot-red"></span>
+              <div class="class-info">
+                <span class="class-name">No Helmet (Head)</span>
+                <span class="class-sub">Violation Alert</span>
+              </div>
+              <span class="class-count" id="count-no-helmet">0</span>
+            </div>
+
+            <div class="class-item" id="class-person">
+              <span class="class-dot dot-blue"></span>
+              <div class="class-info">
+                <span class="class-name">Rider / Person</span>
+                <span class="class-sub">Target Object</span>
+              </div>
+              <span class="class-count" id="count-person">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulation & Backend Controls Widget -->
+        <div class="model-control-widget">
+          <div class="widget-header">
+            <h4>Inference Engine Mode</h4>
+            <span class="widget-badge" id="engine-status-badge">Simulation Active</span>
+          </div>
+          <p class="widget-desc">You can test right now with simulated Deep Learning boxes, or connect to your own Python Flask/FastAPI model.</p>
+          <div class="widget-buttons">
+            <button id="btn-simulate-helmet" class="btn btn-sm btn-outline-green" title="Force Helmet Detected Simulation">
+              Simulate Helmet
+            </button>
+            <button id="btn-simulate-violation" class="btn btn-sm btn-outline-red" title="Force Violation Simulation">
+              Simulate Violation
+            </button>
+            <button id="btn-toggle-auto-sim" class="btn btn-sm btn-outline-cyan active" title="Toggle dynamic simulation loop">
+              Auto Sim: ON
+            </button>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- Incident History & Detection Event Logs -->
+    <section class="history-section" aria-label="Detection Event Log">
+      <div class="history-header">
+        <div class="history-title-group">
+          <h2>Incident & Detection Logs</h2>
+          <span class="history-counter" id="log-counter">0 events logged</span>
+        </div>
+        <div class="history-actions">
+          <button id="btn-clear-logs" class="btn btn-sm btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            Clear Log
+          </button>
+          <button id="btn-export-csv" class="btn btn-sm btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Export CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="history-table" id="history-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Timestamp</th>
+              <th>Snapshot</th>
+              <th>Detection Result</th>
+              <th>Target Class</th>
+              <th>Confidence</th>
+              <th>Compliance Status</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body">
+            <tr class="empty-row" id="empty-log-row">
+              <td colspan="7">No detection incidents recorded yet. Start camera to record events.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>HelmetVision AI System &copy; 2026. Built with HTML5, CSS3, Vanilla JS &amp; Deep Learning Vision Pipeline.</p>
+    </footer>
+
+  </div>
+
+  <!-- Backend Integration Settings Modal -->
+  <div class="modal-overlay hidden" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <h3 id="modal-title">Backend Model &amp; System Configuration</h3>
+        </div>
+        <button id="btn-close-modal" class="btn btn-icon" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Inference Engine Mode Selector -->
+        <div class="form-group">
+          <label class="form-label">Inference Mode</label>
+          <div class="radio-pill-group">
+            <label class="radio-pill">
+              <input type="radio" name="inference-mode" value="simulation" id="mode-sim" checked>
+              <span>Simulated DL Model (Offline Demo)</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="inference-mode" value="backend" id="mode-backend">
+              <span>Live Python Backend (Flask / FastAPI)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Backend API URL -->
+        <div class="form-group" id="group-backend-url">
+          <label for="input-api-url" class="form-label">Backend Model API Endpoint URL</label>
+          <div class="input-with-button">
+            <input type="url" id="input-api-url" class="form-control" value="http://127.0.0.1:5000/detect" placeholder="http://127.0.0.1:5000/detect">
+            <button id="btn-test-connection" class="btn btn-secondary">Test Ping</button>
+          </div>
+          <span class="form-hint" id="connection-status-msg">Companion backend template provided in <code>backend_sample.py</code></span>
+        </div>
+
+        <!-- Confidence Threshold Slider -->
+        <div class="form-group">
+          <div class="label-with-val">
+            <label for="range-confidence" class="form-label">Minimum Detection Confidence Threshold</label>
+            <span class="range-val" id="val-confidence-thresh">65%</span>
+          </div>
+          <input type="range" id="range-confidence" min="30" max="95" value="65" class="form-range">
+        </div>
+
+        <!-- Sampling Rate (FPS throttle) -->
+        <div class="form-group">
+          <div class="label-with-val">
+            <label for="range-interval" class="form-label">Backend Request Interval (Inference Delay)</label>
+            <span class="range-val" id="val-interval-thresh">250 ms</span>
+          </div>
+          <input type="range" id="range-interval" min="100" max="1000" step="50" value="250" class="form-range">
+        </div>
+
+        <!-- Auto Log Violations -->
+        <div class="form-group-checkbox">
+          <label class="checkbox-container">
+            <input type="checkbox" id="chk-auto-log" checked>
+            <span class="checkmark"></span>
+            <span class="checkbox-text">Automatically capture snapshots on Safety Violations</span>
+          </label>
+        </div>
+
+        <!-- Audio Alert Sound -->
+        <div class="form-group-checkbox">
+          <label class="checkbox-container">
+            <input type="checkbox" id="chk-audio-alert" checked>
+            <span class="checkmark"></span>
+            <span class="checkbox-text">Play synthesized warning alarm on "No Helmet" violation</span>
+          </label>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-save-settings" class="btn btn-primary">Save Configuration</button>
+        <button id="btn-cancel-settings" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

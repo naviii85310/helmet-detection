@@ -1,0 +1,9 @@
+# Helmet Detection System - Backend Dependencies
+flask>=3.0.0
+flask-cors>=4.0.0
+numpy>=1.24.0
+opencv-python>=4.8.0
+pillow>=10.0.0
+
+# Deep Learning YOLO model framework (optional for running custom .pt weights)
+ultralytics>=8.0.0
